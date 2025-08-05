@@ -1,15 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                         Gestione colori flessibile                         */
+/*                                                        :::      ::::::::   */
+/*   philosophers_colors.h                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/05 19:55:08 by mcecchel          #+#    #+#             */
+/*   Updated: 2025/08/05 19:55:15 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #ifndef PHILOSOPHERS_COLORS_H
 # define PHILOSOPHERS_COLORS_H
-
-/* -------------------------------------------------------------------------- */
-/* Come si usa: inserire o rimuovere flag -DUSE_COLOR in Makefile             */
-/* -------------------------------------------------------------------------- */
 
 # ifdef USE_COLOR
 #  define COLOR_RESET    "\033[0m"

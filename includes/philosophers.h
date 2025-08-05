@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/05 19:38:16 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/05 19:53:00 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,25 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-/* Cosa deve "sapere" ogni filosofo?
-
-Chi è (la sua identità)
-Quando ha mangiato l'ultima volta (per calcolare se sta morendo)
-Quanti pasti ha fatto (per la condizione di stop opzionale)
-Quali forchette può usare (le sue risorse)
-Come accedere alle regole del gioco (dati condivisi)
+/*
+Cosa deve "sapere" ogni filosofo?
+-Chi è (la sua identità)
+-Quando ha mangiato l'ultima volta (per calcolare se sta morendo)
+-Quanti pasti ha fatto (per la condizione di stop opzionale)
+-Quali forchette può usare (le sue risorse)
+-Come accedere alle regole del gioco (dati condivisi)
 
 Cosa deve "fare" ogni filosofo?
+-Eseguire il ciclo: pensa → mangia → dorme → ripeti
+-Controllare se sta morendo
+-Comunicare le sue azioni (stampe)
+-Rispettare la sincronizzazione
 
-Eseguire il ciclo: pensa → mangia → dorme → ripeti
-Controllare se sta morendo
-Comunicare le sue azioni (stampe)
-Rispettare la sincronizzazione */
+argomenti da passare da riga di comando:
+./philosophers [num_philosophers] [time_to_die] [time_to_eat] [time_to_sleep] [optional: total_meals]
+*/
 
+typedef struct s_philosopher t_philosopher;// X forward declaration
 typedef struct	s_data
 {
 	int				philos_nbr;
