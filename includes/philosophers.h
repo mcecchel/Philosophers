@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/05 19:53:00 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/21 16:19:29 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,59 +21,45 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-/*
-Cosa deve "sapere" ogni filosofo?
--Chi è (la sua identità)
--Quando ha mangiato l'ultima volta (per calcolare se sta morendo)
--Quanti pasti ha fatto (per la condizione di stop opzionale)
--Quali forchette può usare (le sue risorse)
--Come accedere alle regole del gioco (dati condivisi)
+// Messaggi di stato
+# define SLEEP "is sleeping\n"
+# define THINK "is thinking\n"
+# define FORK "has taken a fork\n"
+# define EAT "is eating\n"
+# define DEAD "died\n"
 
-Cosa deve "fare" ogni filosofo?
--Eseguire il ciclo: pensa → mangia → dorme → ripeti
--Controllare se sta morendo
--Comunicare le sue azioni (stampe)
--Rispettare la sincronizzazione
+typedef struct s_philo t_philo;// X forward declaration
 
-argomenti da passare da riga di comando:
-./philosophers [num_philosophers] [time_to_die] [time_to_eat] [time_to_sleep] [optional: total_meals]
-*/
-
-typedef struct s_philosopher t_philosopher;// X forward declaration
+// Struttura principale
 typedef struct	s_data
 {
-	int				philos_nbr;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				time_to_die;
-	int				total_meals;
-	unsigned long	start_time;
-	t_philosopher	*philosopher;
+	int				philos_nbr;// Numero filosofi
+	int				time_to_eat;// Tempo per mangiare
+	int				time_to_sleep;// Tempo per dormire
+	int				time_to_die;// Tempo massimo senza mangiare
+	int				meals_nbr;// Numero pasti richiesti
+	unsigned long	is_started;// Tempo di inizio simulazione
+	int				is_ended;// Flag di fine simulazione
+	bool			count_meals;// Flag se contare i pasti
+	struct s_philo	*philo;// Array filosofi
 	// === RISORSE CONDIVISE ===
-	pthread_mutex_t	*fork_mutex;
-	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	death_mutex;
-	pthread_mutex_t	meal_mutex;
-}				t_data;
+	pthread_mutex_t	*fork_mutex;// Array mutex forchette
+	pthread_mutex_t	print_mutex;// Mutex per stampe
+	pthread_mutex_t	end_mutex;// Mutex per flag fine
+}	t_data;
 
-typedef struct s_philosopher
+// Struttura singolo filosofo
+struct s_philo
 {
-	// IDENTITÀ
 	int				id;// Numero del filosofo
-
-	// STATO VITALE
-	unsigned long	last_meal;// Ultimo pasto in millisecondi
+	int				left_fork;// Indice forchetta sx
+	int				right_fork;// Indice forchetta dx
 	int				meals_eaten;// Contatore pasti consumati
+	unsigned long	last_meal;// Timestamp ultimo pasto consumato
+	pthread_t		philo;// Thread del filosofo
+	pthread_mutex_t	status;// Mutex per dati personali
+	t_data			*table;// Puntatore ai dati condivisi
 
-	// RISORSE
-	int				left_fork;// ID della forchetta sx
-	int				right_fork;// ID della forchetta dx
-
-	// RISORSE CONDIVISE
-	t_data	*data;// Puntatore ai dati condivisi
-
-	// THREAD MANAGEMENT
-	pthread_t		philosopher;// Thread handler
-}				t_philosopher;
+};
 
 #endif

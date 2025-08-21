@@ -23,7 +23,7 @@ SRC_S = main.c \
 	routine.c \
 	mutex.c \
 	utils.c \
-	time.c \
+	manage_time.c \
 	monitor.c \
 
 SRC = $(addprefix $(SRCDIR)/,$(SRC_S))
