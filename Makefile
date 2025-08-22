@@ -1,10 +1,9 @@
 NAME = philosophers
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread -pedantic -I./include
-SRCDIR = src
+CFLAGS = -Wall -Wextra -Werror -g -pthread -pedantic
 RM = rm -f
 
-# Inserire USE_COLOR=1 durante la compilazione per attivare i colori
+# Durante la compilazione (: make USE_COLOR=1) per attivare i colori
 ifeq ($(USE_COLOR),1)
 	CFLAGS += -DUSE_COLOR
 	RED         := ${shell tput setaf 1}
@@ -18,15 +17,14 @@ else
 	BOLD        :=
 endif
 
-SRC_S = main.c \
-	init.c \
-	routine.c \
-	mutex.c \
+SRC = main.c \
+	test_parsing.c \
 	utils.c \
-	manage_time.c \
-	monitor.c \
-
-SRC = $(addprefix $(SRCDIR)/,$(SRC_S))
+	time.c \
+	mutex.c \
+	parsing.c \
+	initialize_philos.c \
+	routine.c \
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:57:03 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/21 16:19:00 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/22 14:34:10 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	ft_atoi(const char *str)
 	result = 0;
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
 		i++;
+	if (str[i] == '+')
+		i++;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		result = result * 10 + (str[i] - '0');
@@ -39,28 +41,27 @@ int	ft_atoi(const char *str)
 
 bool	syntax_checker(char *str)
 {
-	// TODO: implementa validazione
-	// Controlla che contenga solo cifre
-	// Gestisci il caso del segno '+' iniziale
-	// Rifiuta numeri negativi
 	int	i;
 
 	i = 0;
+	// Controlla stringa vuota
 	if (str[0] == '\0')
 		return (false);
+	// Gestisci il caso del segno '+' iniziale
+	if (str[0] == '+')
+		i++;
+	// Rifiuta numeri negativi
+	if (str[0] == '-')
+		return (false);
+	// Controlla che ci sia almeno una cifra dopo il '+'
+	if (str[i] == '\0')
+		return (false);
+	// Controlla che contenga solo cifre
 	while (str[i])
 	{
-		if (str[i] == '-' || str[i] == '+')
-		{
-			if (i != 0 || str[i] == '-')
-				return (false);
-			else
-				i++;
-		}
-		else if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(str[i]))
 			return (false);
-		else
-			i++;
+		i++;
 	}
 	return (true);
 }

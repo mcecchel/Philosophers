@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/21 16:19:29 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/22 15:51:34 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define EAT "is eating\n"
 # define DEAD "died\n"
 
-typedef struct s_philo t_philo;// X forward declaration
+typedef struct s_philo t_philo;// forward declaration
 
 // Struttura principale
 typedef struct	s_data
@@ -61,5 +61,26 @@ struct s_philo
 	t_data			*table;// Puntatore ai dati condivisi
 
 };
+
+// Utils
+int					ft_isdigit(int c);
+int					ft_atoi(const char *str);
+bool				syntax_checker(char *str);
+
+// Time
+unsigned long		get_time(void);
+void				ft_usleep(unsigned long ms);
+
+// Mutex
+int					initialize_mutex(t_data *table);
+void				destroy_mutex(t_data *table);
+int					int_safe_read(pthread_mutex_t *mutex, int *value);
+unsigned long		ulong_safe_read(pthread_mutex_t *mutex, unsigned long *value);
+
+// Arg. parsing
+int					validate_philosophers(int n, t_data *data);
+int					validate_times(int i, int n, t_data *data);
+int					validate_and_assign(int i, int n, t_data *data);
+int					parse_arguments(int ac, char **av, t_data *data);
 
 #endif
