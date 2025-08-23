@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/22 15:51:34 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:06:20 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ struct s_philo
 
 // Utils
 int					ft_isdigit(int c);
+int					ft_strcmp(char *s1, char *s2);
 int					ft_atoi(const char *str);
 bool				syntax_checker(char *str);
 
@@ -82,5 +83,20 @@ int					validate_philosophers(int n, t_data *data);
 int					validate_times(int i, int n, t_data *data);
 int					validate_and_assign(int i, int n, t_data *data);
 int					parse_arguments(int ac, char **av, t_data *data);
+
+// Aggiungi queste dichiarazioni di funzioni nel file philosophers.h
+
+// === ROUTINE E AZIONI ===
+void				eating(t_philo *philo);
+void				print_status(t_philo *philo, char *message);
+void				sleeping(t_philo *philo);
+void				thinking(t_philo *philo);
+void				*cycle(t_philo *philo);
+
+// === INIZIALIZZAZIONE ===
+int					philo_init(t_data *table);
+void				single_philo_init(t_data *table);
+int					philo_create(t_data *table);
+int					philo_join(t_data *table);
 
 #endif

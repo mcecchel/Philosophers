@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/22 17:38:05 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:25:01 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	philo_create(t_data *table)
 	i = 0;
 	while (i < table->philos_nbr)
 	{
-		if (pthread_create(&table->philo[i].philo, NULL, (void *)routine, &table->philo[i]) != 0)//da fare funzione routine
+		if (pthread_create(&table->philo[i].philo, NULL, &cycle, &table->philo[i]) != 0)//da fare funzione routine
 		{
 			printf("Errore: creazione thread filosofo %d fallita\n", table->philo[i].id);
 			return (1);

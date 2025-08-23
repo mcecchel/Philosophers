@@ -24,7 +24,7 @@ SRC = main.c \
 	mutex.c \
 	parsing.c \
 	initialize_philos.c \
-	routine.c \
+	actions.c \
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:19:12 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/22 17:02:58 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/23 17:00:30 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_usleep(unsigned long ms)
 	unsigned long	start_time;
 
 	start_time = get_time();
-	while (get_time() - start_time < ms)
+	while ((get_time() - start_time) < ms)
 	{
 		usleep(100);// Sleep breve per evitare busy waiting
 	}
