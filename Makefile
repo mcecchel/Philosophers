@@ -18,13 +18,13 @@ else
 endif
 
 SRC = main.c \
-	test_parsing.c \
 	utils.c \
 	time.c \
 	mutex.c \
 	parsing.c \
 	initialize_philos.c \
 	actions.c \
+	monitoring.c \
 
 all: $(NAME)
 
