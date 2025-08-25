@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/23 18:06:20 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/25 14:09:06 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ int					validate_times(int i, int n, t_data *data);
 int					validate_and_assign(int i, int n, t_data *data);
 int					parse_arguments(int ac, char **av, t_data *data);
 
-// Aggiungi queste dichiarazioni di funzioni nel file philosophers.h
-
 // === ROUTINE E AZIONI ===
 void				eating(t_philo *philo);
 void				print_status(t_philo *philo, char *message);
@@ -98,5 +96,10 @@ int					philo_init(t_data *table);
 void				single_philo_init(t_data *table);
 int					philo_create(t_data *table);
 int					philo_join(t_data *table);
+
+// === MONITORAGGIO ===
+bool				has_eaten_enough(t_data *table);
+bool				is_dead(t_philo *philo);
+int					monitoring(t_data *table);
 
 #endif

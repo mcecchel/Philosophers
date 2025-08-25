@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/23 18:25:01 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/25 14:14:47 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ void	single_philo_init(t_data *table)
 		table->philo[i].table = table;
 		// Assegna l'ID del filosofo (da 1 a n)
 		table->philo[i].id = i + 1;
+		
+		table->philo[i].last_meal = table->is_started;
+		table->philo[i].meals_eaten = 0;
+		
 		// Assegna le forchette (logica circolare)
 		if (i == 0)// Primo filosofo (caso speciale)
 		{
@@ -99,10 +103,25 @@ int	philo_init(t_data *table)
 		printf("Errore: allocazione memoria filosofi fallita\n");
 		return (1);
 	}
-	initialize_mutex(table);
+	if (initialize_mutex(table) != 0)
+	{
+		free(table->philo);
+		return (1);
+	}
 	single_philo_init(table);
-	philo_create(table);
-	// Monitoraggio (da implementare)
-	philo_join(table);
+	if (philo_create(table) != 0)
+	{
+		destroy_mutex(table);
+		// free(table->philo);
+		return (1);
+	}
+	monitoring(table);
+	if (philo_join(table) != 0)
+	{
+		destroy_mutex(table);
+		// free(table->philo);
+		return (1);
+	}
+	destroy_mutex(table);
 	return (0);
 }
