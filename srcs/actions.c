@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 17:38:38 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/23 18:56:46 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/25 18:24:17 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,16 @@ void	eating(t_philo *philo)
 	//   6. Sleep per time_to_eat
 	//   7. Aggiorna last_meal e personal_meals (thread-safe!)
 	//   8. Rilascia entrambe le forchette
-	pthread_mutex_lock(&philo->table->fork_mutex[philo->right_fork]);
+	if (philo->id + 1 == philo->table->philos_nbr)
+	{
+		pthread_mutex_lock(&philo->table->fork_mutex[philo->right_fork]);
+		pthread_mutex_lock(&philo->table->fork_mutex[philo->left_fork]);
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->table->fork_mutex[philo->left_fork]);
+		pthread_mutex_lock(&philo->table->fork_mutex[philo->right_fork]);
+	}
 	print_status(philo, FORK);
 	// Gestisco caso singolo filosofo (NB: non può prendere la seconda forchetta)
 	if (philo->table->philos_nbr == 1)
@@ -32,7 +41,6 @@ void	eating(t_philo *philo)
 		pthread_mutex_unlock(&philo->table->fork_mutex[philo->right_fork]);
 		return ;
 	}
-	pthread_mutex_lock(&philo->table->fork_mutex[philo->left_fork]);
 	print_status(philo, FORK);
 	print_status(philo, EAT);
 	ft_usleep(philo->table->time_to_eat);
@@ -83,15 +91,17 @@ void	thinking(t_philo *philo)
 }
 
 // Ciclo di azioni principale di ogni thread-filosofo
-void *cycle(t_philo *philo)
+void *cycle(void *arg)
 {
 	// TODO: implementa strategia anti-deadlock:
 	//   - Filosofi pari aspettano 1ms prima di iniziare
 	//   - Loop fino a fine simulazione o completamento pasti
 	//   - Sequence: mangiare -> dormire -> pensare
 	//   - Gestisci caso filosofo solitario
-	int	current_meals;
+	int		current_meals;
+	t_philo	*philo;
 	
+	philo = (t_philo *)arg;
 	 if (philo->id % 2 == 0)
 		ft_usleep(1);
 	if (philo->table->philos_nbr == 1)

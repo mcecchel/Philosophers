@@ -1,6 +1,6 @@
 NAME = philosophers
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread -pedantic
+CFLAGS = -Wall -Wextra -Werror -g -pthread -pedantic -I./includes
 RM = rm -f
 
 # Durante la compilazione (: make USE_COLOR=1) per attivare i colori
@@ -17,14 +17,14 @@ else
 	BOLD        :=
 endif
 
-SRC = main.c \
-	utils.c \
-	time.c \
-	mutex.c \
-	parsing.c \
-	initialize_philos.c \
-	actions.c \
-	monitoring.c \
+SRC =	srcs/main.c \
+		srcs/utils.c \
+		srcs/time.c \
+		srcs/mutex.c \
+		srcs/parsing.c \
+		srcs/initialize_philos.c \
+		srcs/actions.c \
+		srcs/monitoring.c
 
 all: $(NAME)
 
@@ -45,6 +45,8 @@ re: fclean all
 .SILENT:
 
 temple:
+
+	@echo '                                    '
 	@echo '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀'
 	@echo '⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣀⠀⠀⠀⠀⠀⠀⠀'
 	@echo '⠀⠀⠀⢀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⡀⠀⠀⠀'
@@ -59,3 +61,5 @@ temple:
 	@echo '⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀'
 	@echo '⠀⠀⢰⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⡆⠀⠀'
 	@echo '⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠁⠀⠀'
+	@echo '                                    '
+

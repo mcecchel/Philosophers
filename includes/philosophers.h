@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/23 18:06:20 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/25 18:23:54 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,81 +22,88 @@
 # include <sys/time.h>
 
 // Messaggi di stato
-# define SLEEP "is sleeping\n"
-# define THINK "is thinking\n"
-# define FORK "has taken a fork\n"
-# define EAT "is eating\n"
-# define DEAD "died\n"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define FORK "has taken a fork"
+# define EAT "is eating"
+# define DEAD "died"
 
 typedef struct s_philo t_philo;// forward declaration
 
 // Struttura principale
 typedef struct	s_data
 {
-	int				philos_nbr;// Numero filosofi
-	int				time_to_eat;// Tempo per mangiare
-	int				time_to_sleep;// Tempo per dormire
-	int				time_to_die;// Tempo massimo senza mangiare
-	int				meals_nbr;// Numero pasti richiesti
-	unsigned long	is_started;// Tempo di inizio simulazione
-	int				is_ended;// Flag di fine simulazione
-	bool			count_meals;// Flag se contare i pasti
-	struct s_philo	*philo;// Array filosofi
-	// === RISORSE CONDIVISE ===
-	pthread_mutex_t	*fork_mutex;// Array mutex forchette
-	pthread_mutex_t	print_mutex;// Mutex per stampe
-	pthread_mutex_t	end_mutex;// Mutex per flag fine
+    int				philos_nbr;// Numero filosofi
+    int				time_to_eat;// Tempo per mangiare
+    int				time_to_sleep;// Tempo per dormire
+    int				time_to_die;// Tempo massimo senza mangiare
+    int				meals_nbr;// Numero pasti richiesti
+    unsigned long	is_started;// Tempo di inizio simulazione
+    int				is_ended;// Flag di fine simulazione
+    bool			count_meals;// Flag se contare i pasti
+    struct s_philo	*philo;// Array filosofi
+    // === RISORSE CONDIVISE ===
+    pthread_mutex_t	*fork_mutex;// Array mutex forchette
+    pthread_mutex_t	print_mutex;// Mutex per stampe
+    pthread_mutex_t	end_mutex;// Mutex per flag fine
 }	t_data;
 
 // Struttura singolo filosofo
 struct s_philo
 {
-	int				id;// Numero del filosofo
-	int				left_fork;// Indice forchetta sx
-	int				right_fork;// Indice forchetta dx
-	int				meals_eaten;// Contatore pasti consumati
-	unsigned long	last_meal;// Timestamp ultimo pasto consumato
-	pthread_t		philo;// Thread del filosofo
-	pthread_mutex_t	status;// Mutex per dati personali
-	t_data			*table;// Puntatore ai dati condivisi
-
+    int				id;// Numero del filosofo
+    int				left_fork;// Indice forchetta sx
+    int				right_fork;// Indice forchetta dx
+    int				meals_eaten;// Contatore pasti consumati
+    unsigned long	last_meal;// Timestamp ultimo pasto consumato
+    pthread_t		philo;// Thread del filosofo
+    pthread_mutex_t	status;// Mutex per dati personali
+    t_data			*table;// Puntatore ai dati condivisi
 };
 
-// Utils
+// === UTILS (utils.c) ===
 int					ft_isdigit(int c);
 int					ft_strcmp(char *s1, char *s2);
 int					ft_atoi(const char *str);
 bool				syntax_checker(char *str);
 
-// Time
+// === TIME (time.c) ===
 unsigned long		get_time(void);
 void				ft_usleep(unsigned long ms);
 
-// Mutex
+// === MUTEX (mutex.c) ===
 int					initialize_mutex(t_data *table);
 void				destroy_mutex(t_data *table);
 int					int_safe_read(pthread_mutex_t *mutex, int *value);
 unsigned long		ulong_safe_read(pthread_mutex_t *mutex, unsigned long *value);
 
-// Arg. parsing
+// === PARSING (parsing.c) ===
 int					validate_philosophers(int n, t_data *data);
 int					validate_times(int i, int n, t_data *data);
 int					validate_and_assign(int i, int n, t_data *data);
 int					parse_arguments(int ac, char **av, t_data *data);
 
-// Aggiungi queste dichiarazioni di funzioni nel file philosophers.h
-
-// === ROUTINE E AZIONI ===
-void				eating(t_philo *philo);
+// === ACTIONS (actions.c) ===
 void				print_status(t_philo *philo, char *message);
-void				sleeping(t_philo *philo);
-void				thinking(t_philo *philo);
-void				*cycle(t_philo *philo);
+int					take_forks(t_philo *philo);
+void				drop_forks(t_philo *philo);
+int					eat(t_philo *philo);
+int					sleep_philo(t_philo *philo);
+int					think(t_philo *philo);
+void				*cycle(void *arg);
 
-// === INIZIALIZZAZIONE ===
+// === INITIALIZE_PHILOS (initialize_philos.c) ===
+int					allocate_resources(t_data *table);
+int					initialize_forks(t_data *table);
+int					initialize_philosophers(t_data *table);
 int					philo_init(t_data *table);
 void				single_philo_init(t_data *table);
 int					philo_create(t_data *table);
 int					philo_join(t_data *table);
+
+// === MONITORING (monitoring.c) ===
+bool				has_eaten_enough(t_data *table);
+bool				is_dead(t_philo *philo);
+int					monitoring(t_data *table);
 
 #endif

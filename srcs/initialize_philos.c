@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/23 18:25:01 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:37:46 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ void	single_philo_init(t_data *table)
 		table->philo[i].table = table;
 		// Assegna l'ID del filosofo (da 1 a n)
 		table->philo[i].id = i + 1;
+		// Inizializza contatore pasti e timestamp ultimo pasto
+		table->philo[i].last_meal = 0;
+		table->philo[i].meals_eaten = 0;
 		// Assegna le forchette (logica circolare)
 		if (i == 0)// Primo filosofo (caso speciale)
 		{
@@ -86,23 +89,43 @@ int	philo_join(t_data *table)
 
 int	philo_init(t_data *table)
 {
-    // TODO: sequenza inizializzazione:
-    //   1. Alloca array filosofi
-    //   2. Inizializza mutex con mutex_init()
-    //   3. Configura ogni filosofo con philo_set()
-    //   4. Crea threads con philo_create()
-    //   5. Avvia monitoring
-    //   6. Attendi completion con philo_join()
+	// TODO: sequenza inizializzazione:
+	//   1. Alloca array filosofi
+	//   2. Inizializza mutex con mutex_init()
+	//   3. Configura ogni filosofo con philo_set()
+	//   4. Crea threads con philo_create()
+	//   5. Avvia monitoring
+	//   6. Attendi completion con philo_join()
+	// 1. Alloca array filosofi
 	table->philo = malloc(sizeof(t_philo) * table->philos_nbr);
 	if (!table->philo)
 	{
 		printf("Errore: allocazione memoria filosofi fallita\n");
 		return (1);
 	}
-	initialize_mutex(table);
+	
+	if (initialize_mutex(table) != 0)
+	{
+		free(table->philo); // ✅ Cleanup corretto
+		return (1);
+	}
+	
 	single_philo_init(table);
-	philo_create(table);
-	// Monitoraggio (da implementare)
-	philo_join(table);
+	
+	if (philo_create(table) != 0)
+	{
+		destroy_mutex(table); // Questo fa già free() interno
+		return (1);
+	}
+	
+	monitoring(table);
+	
+	if (philo_join(table) != 0)
+	{
+		destroy_mutex(table);
+		return (1);
+	}
+	
+	destroy_mutex(table);
 	return (0);
 }

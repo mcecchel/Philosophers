@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:36:09 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/22 15:42:29 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/25 18:22:37 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,18 @@ unsigned long	ulong_safe_read(pthread_mutex_t *mutex, unsigned long *value)
 	copy = *value;
 	pthread_mutex_unlock(mutex);
 	return (copy);
+}
+
+void	int_safe_write(pthread_mutex_t *mutex, int *value, int copy)
+{
+	pthread_mutex_lock(mutex);
+	*value = copy;
+	pthread_mutex_unlock(mutex);
+}
+
+void	ulong_safe_write(pthread_mutex_t *mutex, unsigned long *value, unsigned long copy)
+{
+	pthread_mutex_lock(mutex);
+	*value = copy;
+	pthread_mutex_unlock(mutex);
 }
