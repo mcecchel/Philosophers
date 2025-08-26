@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:01:46 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/25 17:36:17 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:12:08 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	parse_arguments(int ac, char **av, t_data *data)
 	i = 1;
 	while (i < ac)
 	{
-		// Validazione sintassi
 		if (!syntax_checker(av[i]))
 		{
 			printf("Errore: argomento '%s' non valido\n", av[i]);
@@ -65,7 +64,6 @@ int	parse_arguments(int ac, char **av, t_data *data)
 			return (1);
 		i++;
 	}
-	// Se il 5° argomento non è fornito, imposta a -1 (nessun limite)
 	if (ac == 5)
 		data->meals_nbr = -1;
 	return (0);

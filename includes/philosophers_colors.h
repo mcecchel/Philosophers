@@ -6,10 +6,9 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 19:55:08 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/23 17:53:53 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:09:26 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef PHILOSOPHERS_COLORS_H
 # define PHILOSOPHERS_COLORS_H

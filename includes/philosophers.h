@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/26 16:04:05 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:28:47 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,39 +28,37 @@
 # define EAT "is eating"
 # define DEAD "died"
 
-// valgrind --tool=helgrind --history-level=full --conflict-resolution=off
-
-typedef struct s_philo t_philo;// forward declaration
+typedef struct s_philo	t_philo;
 
 // Struttura principale
-typedef struct	s_data
+typedef struct s_data
 {
-    int				philos_nbr;// Numero filosofi
-    int				time_to_eat;// Tempo per mangiare
-    int				time_to_sleep;// Tempo per dormire
-    int				time_to_die;// Tempo massimo senza mangiare
-    int				meals_nbr;// Numero pasti richiesti
-    unsigned long	is_started;// Tempo di inizio simulazione
-    int				is_ended;// Flag di fine simulazione
-    bool			count_meals;// Flag se contare i pasti
-    struct s_philo	*philo;// Array filosofi
-    // === RISORSE CONDIVISE ===
-    pthread_mutex_t	*fork_mutex;// Array mutex forchette
-    pthread_mutex_t	print_mutex;// Mutex per stampe
-    pthread_mutex_t	end_mutex;// Mutex per flag fine
+	int				philos_nbr;// Numero filosofi
+	int				time_to_eat;// Tempo per mangiare
+	int				time_to_sleep;// Tempo per dormire
+	int				time_to_die;// Tempo massimo senza mangiare
+	int				meals_nbr;// Numero pasti richiesti
+	unsigned long	is_started;// Tempo di inizio simulazione
+	int				is_ended;// Flag di fine simulazione
+	bool			count_meals;// Flag se contare i pasti
+	struct s_philo	*philo;// Array filosofi
+	// === RISORSE CONDIVISE ===
+	pthread_mutex_t	*fork_mutex;// Array mutex forchette
+	pthread_mutex_t	print_mutex;// Mutex per stampe
+	pthread_mutex_t	end_mutex;// Mutex per flag fine
 }	t_data;
 
 // Struttura singolo filosofo
 struct s_philo
 {
-    int				id;// Numero del filosofo
-    int				left_fork;// Indice forchetta sx
-    int				right_fork;// Indice forchetta dx
-    int				meals_eaten;// Contatore pasti consumati
-    unsigned long	last_meal;// Timestamp ultimo pasto consumato
-    pthread_t		philo;// Thread del filosofo
-    pthread_mutex_t	status;// Mutex per dati personali
-    t_data			*table;// Puntatore ai dati condivisi
+	int				id;// Numero del filosofo
+	int				left_fork;// Indice forchetta sx
+	int				right_fork;// Indice forchetta dx
+	int				meals_eaten;// Contatore pasti consumati
+	unsigned long	last_meal;// Timestamp ultimo pasto consumato
+	pthread_t		philo;// Thread del filosofo
+	pthread_mutex_t	status;// Mutex per dati personali
+	t_data			*table;// Puntatore ai dati condivisi
 };
 
 // === UTILS (utils.c) ===
@@ -76,8 +74,15 @@ void				ft_usleep(unsigned long ms);
 // === MUTEX (mutex.c) ===
 int					initialize_mutex(t_data *table);
 void				destroy_mutex(t_data *table);
+
+// === MUTEX SAFE READ & WRITE (safe_rw.c) ===
 int					int_safe_read(pthread_mutex_t *mutex, int *value);
-unsigned long		ulong_safe_read(pthread_mutex_t *mutex, unsigned long *value);
+unsigned long		ulong_safe_read(pthread_mutex_t *mutex,
+						unsigned long *value);
+void				int_safe_write(pthread_mutex_t *mutex, int *value,
+						int copy);
+void				ulong_safe_write(pthread_mutex_t *mutex,
+						unsigned long *value, unsigned long copy);
 
 // === PARSING (parsing.c) ===
 int					validate_philosophers(int n, t_data *data);

@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -pthread -pedantic -I./includes
 RM = rm -f
 
-# Durante la compilazione (: make USE_COLOR=1) per attivare i colori
+# Durante la compilazio) per attivare i colori
 ifeq ($(USE_COLOR),1)
 	CFLAGS += -DUSE_COLOR
 	RED         := ${shell tput setaf 1}
@@ -21,6 +21,7 @@ SRC =	srcs/main.c \
 		srcs/utils.c \
 		srcs/time.c \
 		srcs/mutex.c \
+		srcs/safe_rw.c \
 		srcs/parsing.c \
 		srcs/initialize_philos.c \
 		srcs/actions.c \

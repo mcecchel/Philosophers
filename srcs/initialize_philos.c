@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/26 15:51:13 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:30:51 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,14 @@ void	single_philo_init(t_data *table)
 	i = 0;
 	while (i < table->philos_nbr)
 	{
-		// Inizializza la struttura del filosofo
 		table->philo[i] = (t_philo){0};
-		table->philo[i].last_meal = table->is_started; // Tempo di inizio simulazione
+		table->philo[i].last_meal = table->is_started;
 		table->philo[i].meals_eaten = 0;
-		// Inizializza il mutex di stato del filosofo
 		pthread_mutex_init(&table->philo[i].status, NULL);
-		// Assegna il riferimento alla struttura dati principale
 		table->philo[i].table = table;
-		// Assegna l'ID del filosofo (da 1 a n)
 		table->philo[i].id = i + 1;
-		table->philo[i].left_fork = i;// Forchetta sinistra
-		table->philo[i].right_fork = (i + 1) % table->philos_nbr; // Forchetta destra (circolare)
-		
+		table->philo[i].left_fork = i;
+		table->philo[i].right_fork = (i + 1) % table->philos_nbr;
 		i++;
 	}
 }
@@ -41,18 +36,18 @@ int	philo_create(t_data *table)
 {
 	int	i;
 
-	// Salva timestamp PRIMA di inizializzare i filosofi
 	table->is_started = get_time();
 	i = 0;
 	while (i < table->philos_nbr)
 	{
-		// Inizializza last_meal al tempo di inizio per ogni filosofo
 		pthread_mutex_lock(&table->philo[i].status);
-		table->philo[i].last_meal = 0; // Relativo all'inizio (0ms)
+		table->philo[i].last_meal = 0;
 		pthread_mutex_unlock(&table->philo[i].status);
-		if (pthread_create(&table->philo[i].philo, NULL, &cycle, &table->philo[i]) != 0)
+		if (pthread_create(&table->philo[i].philo, NULL, &cycle,
+				&table->philo[i]) != 0)
 		{
-			printf("Errore: creazione thread filosofo %d fallita\n", table->philo[i].id);
+			printf("Errore: creazione thread filosofo %d fallita\n",
+				table->philo[i].id);
 			return (1);
 		}
 		i++;
@@ -70,7 +65,8 @@ int	philo_join(t_data *table)
 	{
 		if (pthread_join(table->philo[i].philo, NULL) != 0)
 		{
-			printf("Errore: join thread filosofo %d fallito\n", table->philo[i].id);
+			printf("Errore: join thread filosofo %d fallito\n",
+				table->philo[i].id);
 			return (1);
 		}
 		i++;
@@ -78,16 +74,16 @@ int	philo_join(t_data *table)
 	return (0);
 }
 
+// TODO: sequenza inizializzazione:
+//   1. Alloca array filosofi
+//   2. Inizializza mutex con mutex_init()
+//   3. Configura ogni filosofo con philo_set()
+//   4. Crea threads con philo_create()
+//   5. Avvia monitoring
+//   6. Attendi completion con philo_join()
+// 1. Alloca array filosofi
 int	philo_init(t_data *table)
 {
-	// TODO: sequenza inizializzazione:
-	//   1. Alloca array filosofi
-	//   2. Inizializza mutex con mutex_init()
-	//   3. Configura ogni filosofo con philo_set()
-	//   4. Crea threads con philo_create()
-	//   5. Avvia monitoring
-	//   6. Attendi completion con philo_join()
-	// 1. Alloca array filosofi
 	table->philo = malloc(sizeof(t_philo) * table->philos_nbr);
 	if (!table->philo)
 	{
@@ -100,7 +96,6 @@ int	philo_init(t_data *table)
 		return (1);
 	}
 	single_philo_init(table);
-	
 	if (philo_create(table) != 0)
 	{
 		destroy_mutex(table);
