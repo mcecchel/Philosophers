@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/25 18:23:54 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:04:05 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define FORK "has taken a fork"
 # define EAT "is eating"
 # define DEAD "died"
+
+// valgrind --tool=helgrind --history-level=full --conflict-resolution=off
 
 typedef struct s_philo t_philo;// forward declaration
 

@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 17:38:38 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/25 18:24:17 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:49:25 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,40 @@
 // Acquisisce forchette e mangia
 void	eating(t_philo *philo)
 {
-	// TODO: strategia acquisizione forchette:
-	//   1. Lock forchetta destra
-	//   2. Stampa "taken fork"
-	//   3. Gestisci caso singolo filosofo (return)
-	//   4. Lock forchetta sinistra  
-	//   5. Stampa "taken fork" e "eating"
-	//   6. Sleep per time_to_eat
-	//   7. Aggiorna last_meal e personal_meals (thread-safe!)
-	//   8. Rilascia entrambe le forchette
-	if (philo->id + 1 == philo->table->philos_nbr)
+	// Filosofi pari: prima destra, poi sinistra
+	// Filosofi dispari: prima sinistra, poi destra
+	// -> rompe la dipendenza circolare
+	if (philo->id % 2 == 0)
 	{
+		// Filosofi pari: prima right_fork, poi left_fork
 		pthread_mutex_lock(&philo->table->fork_mutex[philo->right_fork]);
+		print_status(philo, FORK);
+		// Gestisco caso singolo filosofo
+		if (philo->table->philos_nbr == 1)
+		{
+			pthread_mutex_unlock(&philo->table->fork_mutex[philo->right_fork]);
+			return ;
+		}
 		pthread_mutex_lock(&philo->table->fork_mutex[philo->left_fork]);
+		print_status(philo, FORK);
 	}
 	else
 	{
+		// Filosofi dispari: prima left_fork, poi right_fork  
 		pthread_mutex_lock(&philo->table->fork_mutex[philo->left_fork]);
+		print_status(philo, FORK);
 		pthread_mutex_lock(&philo->table->fork_mutex[philo->right_fork]);
+		print_status(philo, FORK);
 	}
-	print_status(philo, FORK);
-	// Gestisco caso singolo filosofo (NB: non può prendere la seconda forchetta)
-	if (philo->table->philos_nbr == 1)
-	{
-		pthread_mutex_unlock(&philo->table->fork_mutex[philo->right_fork]);
-		return ;
-	}
-	print_status(philo, FORK);
+	// Mangia
 	print_status(philo, EAT);
 	ft_usleep(philo->table->time_to_eat);
+	//Aggiorna last_meal con timestamp ATTUALE
 	pthread_mutex_lock(&philo->status);
-	philo->last_meal = get_time();
+	philo->last_meal = get_time() - philo->table->is_started; // Timestamp relativo
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->status);
+	// Rilascia forchette (ordine non critico per il rilascio)
 	pthread_mutex_unlock(&philo->table->fork_mutex[philo->right_fork]);
 	pthread_mutex_unlock(&philo->table->fork_mutex[philo->left_fork]);
 }
@@ -90,7 +91,6 @@ void	thinking(t_philo *philo)
 	print_status(philo, THINK);
 }
 
-// Ciclo di azioni principale di ogni thread-filosofo
 void *cycle(void *arg)
 {
 	// TODO: implementa strategia anti-deadlock:
@@ -98,29 +98,33 @@ void *cycle(void *arg)
 	//   - Loop fino a fine simulazione o completamento pasti
 	//   - Sequence: mangiare -> dormire -> pensare
 	//   - Gestisci caso filosofo solitario
-	int		current_meals;
 	t_philo	*philo;
+	int		current_meals;
 	
 	philo = (t_philo *)arg;
-	 if (philo->id % 2 == 0)
-		ft_usleep(1);
+	// Evita che tutti i filosofi inizino contemporaneamente
+	if (philo->id % 2 == 0)
+		ft_usleep(50); // Filosofi pari aspettano 50ms
+	// Caso filosofo singolo
 	if (philo->table->philos_nbr == 1)
 	{
-		eating(philo);
+		eating(philo); // Tenta di mangiare (fallirà)
 		return (NULL);
 	}
+	// Ciclo principale
 	while (int_safe_read(&philo->table->end_mutex, &philo->table->is_ended) == 0)
 	{
 		eating(philo);
-		// Controllo se ha completato i pasti richiesti
-		pthread_mutex_lock(&philo->status);
-		current_meals = philo->meals_eaten;
-		pthread_mutex_unlock(&philo->status);
-
-		if (current_meals >= philo->table->meals_nbr && philo->table->count_meals)
-			break;
+		// Controlla se ha raggiunto il limite pasti (se attivo)
+		if (philo->table->count_meals)
+		{
+			current_meals = int_safe_read(&philo->status, &philo->meals_eaten);
+			if (current_meals >= philo->table->meals_nbr)
+				break;
+		}
 		sleeping(philo);
 		thinking(philo);
+		ft_usleep(1);
 	}
 	return (NULL);
 }

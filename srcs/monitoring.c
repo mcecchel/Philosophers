@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 18:29:55 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/25 17:32:01 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:47:48 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,24 @@ bool	is_dead(t_philo *philo)
 	// 3. Se > time_to_die -> morte!
 	// 4. Setta flag is_ended e stampa morte
 	// 5. Usa accessi thread-safe per last_meal
-	long int		death_gap;// differenza tra tempo corrente e ultimo pasto
-	long int		current_time;
+	unsigned long	current_time_relative;
 	unsigned long	last_meal_time;
+	long int		death_gap;
 	
-	// Calcola tempo dall'ultimo pasto usando accessi thread-safe
-	current_time = get_time() - philo->table->is_started;
+	// Ottieni tempo corrente relativo all'inizio simulazione
+	current_time_relative = get_time() - philo->table->is_started;
+	// Leggi last_meal in modo thread-safe
 	last_meal_time = ulong_safe_read(&philo->status, &philo->last_meal);
-	
-	// Calcola death_gap: differenza tra tempo corrente e ultimo pasto
-	death_gap = current_time - last_meal_time;
-	
-	// Se il tempo senza mangiare supera il limite -> morte!
-	if (death_gap > philo->table->time_to_die)
+	// Calcola correttamente il death_gap (tempo trascorso dall'ultimo pasto)
+	death_gap = current_time_relative - last_meal_time;
+	// Verifica se è morto
+	if (death_gap >= philo->table->time_to_die)
 	{
-		// 4. Setta flag is_ended in modo thread-safe
+		// Setta flag di fine simulazione
 		pthread_mutex_lock(&philo->table->end_mutex);
 		philo->table->is_ended = 1;
 		pthread_mutex_unlock(&philo->table->end_mutex);
-		
-		// 5. Stampa morte
+		// Stampa morte
 		print_status(philo, DEAD);
 		return (true);
 	}

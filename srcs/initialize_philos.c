@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/25 17:37:46 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:51:13 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,44 +22,35 @@ void	single_philo_init(t_data *table)
 	{
 		// Inizializza la struttura del filosofo
 		table->philo[i] = (t_philo){0};
+		table->philo[i].last_meal = table->is_started; // Tempo di inizio simulazione
+		table->philo[i].meals_eaten = 0;
 		// Inizializza il mutex di stato del filosofo
 		pthread_mutex_init(&table->philo[i].status, NULL);
 		// Assegna il riferimento alla struttura dati principale
 		table->philo[i].table = table;
 		// Assegna l'ID del filosofo (da 1 a n)
 		table->philo[i].id = i + 1;
-		// Inizializza contatore pasti e timestamp ultimo pasto
-		table->philo[i].last_meal = 0;
-		table->philo[i].meals_eaten = 0;
-		// Assegna le forchette (logica circolare)
-		if (i == 0)// Primo filosofo (caso speciale)
-		{
-			table->philo[i].left_fork = i;// Forchetta sinistra
-			table->philo[i].right_fork = table->philos_nbr - 1;// Forchetta destra (ultima)
-		}
-		else// Altri filosofi
-		{
-			table->philo[i].left_fork = i;// Forchetta sinistra
-			table->philo[i].right_fork = i - 1;// Forchetta destra
-		}
+		table->philo[i].left_fork = i;// Forchetta sinistra
+		table->philo[i].right_fork = (i + 1) % table->philos_nbr; // Forchetta destra (circolare)
+		
 		i++;
 	}
 }
 
-// Crea e avvia tutti i thread filosofi
 int	philo_create(t_data *table)
 {
-	// Salva timestamp inizio simulazione
-	// Crea thread per ogni filosofo con pthread_create()
-	// Passa routine come funzione thread
-	// Gestisci errori di creazione
 	int	i;
 
+	// Salva timestamp PRIMA di inizializzare i filosofi
 	table->is_started = get_time();
 	i = 0;
 	while (i < table->philos_nbr)
 	{
-		if (pthread_create(&table->philo[i].philo, NULL, &cycle, &table->philo[i]) != 0)//da fare funzione routine
+		// Inizializza last_meal al tempo di inizio per ogni filosofo
+		pthread_mutex_lock(&table->philo[i].status);
+		table->philo[i].last_meal = 0; // Relativo all'inizio (0ms)
+		pthread_mutex_unlock(&table->philo[i].status);
+		if (pthread_create(&table->philo[i].philo, NULL, &cycle, &table->philo[i]) != 0)
 		{
 			printf("Errore: creazione thread filosofo %d fallita\n", table->philo[i].id);
 			return (1);
@@ -103,29 +94,24 @@ int	philo_init(t_data *table)
 		printf("Errore: allocazione memoria filosofi fallita\n");
 		return (1);
 	}
-	
 	if (initialize_mutex(table) != 0)
 	{
-		free(table->philo); // ✅ Cleanup corretto
+		free(table->philo);
 		return (1);
 	}
-	
 	single_philo_init(table);
 	
 	if (philo_create(table) != 0)
 	{
-		destroy_mutex(table); // Questo fa già free() interno
+		destroy_mutex(table);
 		return (1);
 	}
-	
 	monitoring(table);
-	
 	if (philo_join(table) != 0)
 	{
 		destroy_mutex(table);
 		return (1);
 	}
-	
 	destroy_mutex(table);
 	return (0);
 }
