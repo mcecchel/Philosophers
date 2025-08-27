@@ -6,16 +6,12 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:36:09 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/26 16:13:53 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:31:19 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// TODO: allocare array mutex forchette
-// Inizializzare mutex per ogni forchetta
-// Inizializzare mutex print e end
-// Gestire errori di allocazione
 int	initialize_mutex(t_data *table)
 {
 	int	i;
@@ -37,9 +33,6 @@ int	initialize_mutex(t_data *table)
 	return (0);
 }
 
-// TODO: distruggere tutti i mutex
-// Liberare memoria allocata
-// NB: ordine inverso rispetto all'inizializzazione
 void	destroy_mutex(t_data *table)
 {
 	int	i;

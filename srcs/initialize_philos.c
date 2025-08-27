@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/26 16:30:51 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:38:12 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,7 @@ int	philo_join(t_data *table)
 	return (0);
 }
 
-// TODO: sequenza inizializzazione:
-//   1. Alloca array filosofi
-//   2. Inizializza mutex con mutex_init()
-//   3. Configura ogni filosofo con philo_set()
-//   4. Crea threads con philo_create()
-//   5. Avvia monitoring
-//   6. Attendi completion con philo_join()
-// 1. Alloca array filosofi
+// Sequenza di inizializzazione
 int	philo_init(t_data *table)
 {
 	table->philo = malloc(sizeof(t_philo) * table->philos_nbr);

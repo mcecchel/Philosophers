@@ -25,12 +25,13 @@ SRC =	srcs/main.c \
 		srcs/parsing.c \
 		srcs/initialize_philos.c \
 		srcs/actions.c \
+		srcs/cycle.c \
 		srcs/monitoring.c
 
 all: $(NAME)
 
 $(NAME): $(SRC)
-	@echo "${BOLD}🚀 Creando ${RED}$(NAME)${NO_COLOR}"
+	@echo "${BOLD}🚀...Creando ${RED}$(NAME)${NO_COLOR}"
 	$(CC) $(CFLAGS) -o $@ $(SRC)
 	${MAKE} temple
 
@@ -38,7 +39,7 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
-	@echo "${BOLD}Cleaning -> ${RED}$(NAME)${NO_COLOR}"
+	@echo "${BOLD}🧹...Cleaning ${RED}$(NAME)${NO_COLOR}"
 
 re: fclean all
 

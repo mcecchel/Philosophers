@@ -6,17 +6,14 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 18:29:55 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/26 16:22:24 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:45:30 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 // Monitoraggio per morte e completamento azioni
 
-// TODO: conta filosofi che hanno raggiunto nbr_meals:
-// - Se tutti hanno mangiato abbastanza -> fine simulazione
-// - Setta flag is_ended
-// - Usa accessi thread-safe per personal_meals
+// Conta filosofi che hanno raggiunto nbr_meals
 bool	has_eaten_enough(t_data *table)
 {
 	int	i;
@@ -45,12 +42,8 @@ bool	has_eaten_enough(t_data *table)
 	return (false);
 }
 
-// TODO: calcola tempo dall'ultimo pasto:
-	// 1. Tempo corrente - start_time = tempo_simulazione
-	// 2. tempo_simulazione - last_meal = tempo_senza_mangiare
-	// 3. Se > time_to_die -> morte!
-	// 4. Setta flag is_ended e stampa morte
-	// 5. Usa accessi thread-safe per last_meal
+// Calcola tempo dall'ultimo pasto:
+	// Se > time_to_die -> morte
 bool	is_dead(t_philo *philo)
 {
 	unsigned long	current_time_relative;
@@ -72,11 +65,9 @@ bool	is_dead(t_philo *philo)
 }
 
 // Loop principale di monitoring (eseguito nel thread main)
-// TODO: loop fino a fine simulazione:
-// 1. Controlla se tutti hanno mangiato abbastanza (se count_meals attivo)
-// 2. Controlla ogni filosofo per morte
-// 3. Se morte o completamento -> termina
-// 4. Piccola pausa per evitare busy waiting
+// Controlla se tutti hanno mangiato abbastanza (se count_meals attivo)
+// Controlla ogni filosofo per morte
+// Se morte o completamento -> termina
 int	monitoring(t_data *table)
 {
 	int	i;

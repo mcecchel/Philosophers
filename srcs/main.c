@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:44:52 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/26 16:42:05 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:36:35 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,17 @@ static void	print_usage(void)
 {
 	printf("❌ %sErrore: Argomenti invalidi%s\n", COLOR_ERROR, COLOR_RESET);
 	printf("\n%sUso corretto:%s\n", COLOR_INFO, COLOR_RESET);
-	printf("  %s./philosophers <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]%s\n\n", 
+	printf("  %s./philosophers <number_of_philosophers> <time_to_die> "
+		"<time_to_eat> <time_to_sleep> "
+		"[number_of_times_each_philosopher_must_eat]%s\n\n",
 		COLOR_SUCCESS, COLOR_RESET);
 	printf("%sParametri:%s\n", COLOR_INFO, COLOR_RESET);
 	printf("  • number_of_philosophers: 1-200\n");
 	printf("  • time_to_die: tempo in ms (> 0)\n");
 	printf("  • time_to_eat: tempo in ms (> 0)\n");
 	printf("  • time_to_sleep: tempo in ms (> 0)\n");
-	printf("  • [number_of_times_each_philosopher_must_eat]: opzionale, > 0\n\n");
+	printf("  • [number_of_times_each_philosopher_must_eat]: "
+		"opzionale, > 0\n\n");
 	printf("%sEsempi:%s\n", COLOR_WARNING, COLOR_RESET);
 	printf("  ./philosophers 4 800 200 200\n");
 	printf("  ./philosophers 5 800 200 200 3\n");
