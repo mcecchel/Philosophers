@@ -3,7 +3,6 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -pthread -pedantic -I./includes
 RM = rm -f
 
-# Durante la compilazio) per attivare i colori
 ifeq ($(USE_COLOR),1)
 	CFLAGS += -DUSE_COLOR
 	RED         := ${shell tput setaf 1}
@@ -15,6 +14,10 @@ else
 	BLUE        :=
 	NO_COLOR    :=
 	BOLD        :=
+endif
+
+ifeq ($(EMOJI_ON),1)
+	CFLAGS += -DEMOJI_ON
 endif
 
 SRC =	srcs/main.c \
@@ -47,7 +50,6 @@ re: fclean all
 .SILENT:
 
 temple:
-
 	@echo '                                    '
 	@echo '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀'
 	@echo '⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣀⠀⠀⠀⠀⠀⠀⠀'
@@ -64,4 +66,3 @@ temple:
 	@echo '⠀⠀⢰⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⡆⠀⠀'
 	@echo '⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠁⠀⠀'
 	@echo '                                    '
-

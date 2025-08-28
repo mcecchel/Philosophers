@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/28 15:10:49 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 16:13:08 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	philo_create(t_data *table)
 
 	start_time = get_time();
 	table->is_started = start_time;
-
 	i = 0;
 	while (i < table->philos_nbr)
 	{

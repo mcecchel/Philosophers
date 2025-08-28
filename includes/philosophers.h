@@ -6,27 +6,20 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:12:18 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/27 16:55:14 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 16:38:01 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
-# include "philosophers_colors.h"
+# include "philo_aesthetic.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
 # include <pthread.h>
 # include <sys/time.h>
-
-// Messaggi di stato
-# define SLEEP "is sleeping 💤"
-# define THINK "is thinking 💭"
-# define FORK "has taken a fork 🍴"
-# define EAT "is eating 🍝"
-# define DEAD "died 🪦"
 
 typedef struct s_philo	t_philo;
 
