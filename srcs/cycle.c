@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:39:23 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/27 16:41:47 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:30:12 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*cycle(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		ft_usleep(50);
+		usleep(50);
 	if (philo->table->philos_nbr == 1)
 		return (single_philo_cycle(arg));
 	while (int_safe_read(&philo->table->end_mutex,
@@ -51,7 +51,7 @@ void	*cycle(void *arg)
 		}
 		sleeping(philo);
 		thinking(philo);
-		ft_usleep(1);
+		usleep(100);
 	}
 	return (NULL);
 }

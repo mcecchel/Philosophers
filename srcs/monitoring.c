@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 18:29:55 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/27 16:45:30 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:28:13 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ bool	is_dead(t_philo *philo)
 	current_time_relative = get_time() - philo->table->is_started;
 	last_meal_time = ulong_safe_read(&philo->status, &philo->last_meal);
 	death_gap = current_time_relative - last_meal_time;
-	if (death_gap >= philo->table->time_to_die)
+	if (death_gap > philo->table->time_to_die)
 	{
 		pthread_mutex_lock(&philo->table->end_mutex);
 		philo->table->is_ended = 1;
@@ -83,7 +83,7 @@ int	monitoring(t_data *table)
 				return (1);
 			i++;
 		}
-		usleep(1000);
+		usleep(100);
 	}
 	return (0);
 }

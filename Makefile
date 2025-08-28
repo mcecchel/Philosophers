@@ -1,4 +1,4 @@
-NAME = philosophers
+NAME = philo
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -pthread -pedantic -I./includes
 RM = rm -f
