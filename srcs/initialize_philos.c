@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:47:50 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/27 16:38:12 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:52:57 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	single_philo_init(t_data *table)
 	while (i < table->philos_nbr)
 	{
 		table->philo[i] = (t_philo){0};
-		table->philo[i].last_meal = table->is_started;
+		table->philo[i].last_meal = 0;
 		table->philo[i].meals_eaten = 0;
 		pthread_mutex_init(&table->philo[i].status, NULL);
 		table->philo[i].table = table;
@@ -34,14 +34,17 @@ void	single_philo_init(t_data *table)
 
 int	philo_create(t_data *table)
 {
-	int	i;
+	int				i;
+	unsigned long	start_time;
 
-	table->is_started = get_time();
+	start_time = get_time();
+	table->is_started = start_time;
+
 	i = 0;
 	while (i < table->philos_nbr)
 	{
 		pthread_mutex_lock(&table->philo[i].status);
-		table->philo[i].last_meal = 0;
+		table->philo[i].last_meal = start_time;
 		pthread_mutex_unlock(&table->philo[i].status);
 		if (pthread_create(&table->philo[i].philo, NULL, &cycle,
 				&table->philo[i]) != 0)

@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 18:29:55 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/28 14:28:13 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 14:50:58 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,15 @@ bool	has_eaten_enough(t_data *table)
 		current_meals = int_safe_read(&table->philo[i].status,
 				&table->philo[i].meals_eaten);
 		if (current_meals >= table->meals_nbr)
-		{
 			satisfied_philosophers++;
-			if (satisfied_philosophers == table->philos_nbr)
-			{
-				pthread_mutex_lock(&table->end_mutex);
-				table->is_ended = 1;
-				pthread_mutex_unlock(&table->end_mutex);
-				return (true);
-			}
-		}
 		i++;
+	}
+	if (satisfied_philosophers == table->philos_nbr)
+	{
+		pthread_mutex_lock(&table->end_mutex);
+		table->is_ended = 1;
+		pthread_mutex_unlock(&table->end_mutex);
+		return (true);
 	}
 	return (false);
 }
@@ -46,13 +44,13 @@ bool	has_eaten_enough(t_data *table)
 	// Se > time_to_die -> morte
 bool	is_dead(t_philo *philo)
 {
-	unsigned long	current_time_relative;
+	unsigned long	current_time;
 	unsigned long	last_meal_time;
 	long int		death_gap;
 
-	current_time_relative = get_time() - philo->table->is_started;
+	current_time = get_time();
 	last_meal_time = ulong_safe_read(&philo->status, &philo->last_meal);
-	death_gap = current_time_relative - last_meal_time;
+	death_gap = current_time - last_meal_time;
 	if (death_gap > philo->table->time_to_die)
 	{
 		pthread_mutex_lock(&philo->table->end_mutex);
@@ -83,7 +81,7 @@ int	monitoring(t_data *table)
 				return (1);
 			i++;
 		}
-		usleep(100);
+		usleep(1000);
 	}
 	return (0);
 }
