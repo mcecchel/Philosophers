@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:44:52 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/27 16:36:35 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 16:04:24 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	print_usage(void)
 		"[number_of_times_each_philosopher_must_eat]%s\n\n",
 		COLOR_SUCCESS, COLOR_RESET);
 	printf("%sParametri:%s\n", COLOR_INFO, COLOR_RESET);
-	printf("  • number_of_philosophers: 1-200\n");
+	printf("  • number_of_philosophers: >= 1\n");
 	printf("  • time_to_die: tempo in ms (> 0)\n");
 	printf("  • time_to_eat: tempo in ms (> 0)\n");
 	printf("  • time_to_sleep: tempo in ms (> 0)\n");
