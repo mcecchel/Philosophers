@@ -6,7 +6,7 @@
 /*   By: mcecchel <mcecchel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 17:38:38 by mcecchel          #+#    #+#             */
-/*   Updated: 2025/08/28 14:54:04 by mcecchel         ###   ########.fr       */
+/*   Updated: 2025/08/28 15:01:15 by mcecchel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ void	eating(t_philo *philo)
 void	print_status(t_philo *philo, char *message)
 {
 	unsigned long	timestamp;
+	int				end_flag;
 
-	timestamp = get_time();
 	pthread_mutex_lock(&philo->table->print_mutex);
+	timestamp = get_time();
+	end_flag = int_safe_read(&philo->table->end_mutex, &philo->table->is_ended);
 	if (int_safe_read(&philo->table->end_mutex, &philo->table->is_ended) == 0
 		|| ft_strcmp(message, DEAD) == 0)
 	{
